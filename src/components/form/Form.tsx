@@ -7,12 +7,9 @@ import { requestExcuse } from '../../api/api';
 
 interface FormProps {
     setExcuses: React.Dispatch<React.SetStateAction<Excuse[]>>;
-    mockExcuse: Excuse;
-
-
 }
 
-const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
+const Form: React.FC<FormProps> = ({ setExcuses }) => {
 
 
     const [language, setLanguage] = useState<string>('');
@@ -22,6 +19,7 @@ const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
     const [specificity, setSpecificity] = useState<string>('');
     const [length, setLength] = useState<string>('');
     const [context, setContext] = useState<string>('');
+
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [severity, setSeverity] = useState<'success' | 'error'>('success');
@@ -39,11 +37,12 @@ const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
         setContext('');
     };
 
+    //get rid of these later by changing response from api
     const extractTitle = (response: string): string => {
         const titlePrefix = "Excuse Title:";
         const startIndex = response.indexOf(titlePrefix);
         if (startIndex === -1) {
-            return "Unknown Title"; 
+            return "Unknown Title";
         }
 
         const endIndex = response.indexOf("Excuse Message:", startIndex);
@@ -58,12 +57,13 @@ const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
         const messagePrefix = "Excuse Message:";
         const messageStart = response.indexOf(messagePrefix);
         if (messageStart === -1) {
-            return "Message not found"; // Default message if not found
+            return "Message not found";
         }
         return response.substring(messageStart + messagePrefix.length).trim();
     };
 
 
+    //change validation so that it autofocuses and highlights in red which fields are not filled out
     const handleSubmit = async () => {
         if (!language || !format || !formality || !specificity || !length || !excuseStrength) {
             setSnackbarMessage('Please fill out all required fields!');
@@ -83,7 +83,7 @@ const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
 
             setLoading(true);
             const data = await requestExcuse(excuseParams);
-    
+
 
             setLoading(false);
 
@@ -95,7 +95,7 @@ const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
                     content: extractMessage(data)
                 };
 
-                setExcuses(prevExcuses => [...prevExcuses, newExcuse]);
+                setExcuses(prevExcuses => [newExcuse, ...prevExcuses]);
                 setSnackbarMessage('Excuse submitted!');
                 setSeverity('success');
                 setSnackbarOpen(true);
@@ -277,11 +277,11 @@ const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
                 <Box className="second-row" sx={{
                     marginTop: "2vh"
                 }}>
-                    <TextField id="outlined-basic" value={context}inputProps={{ maxLength: 100 }} label="Enter the context for excuse" variant="outlined" sx={{
+                    <TextField id="outlined-basic" value={context} inputProps={{ maxLength: 100 }} label="Enter the context for excuse" variant="outlined" sx={{
                         width: "51.5vw"
                     }} onChange={(event) => {
                         setContext(event?.target.value)
-                        }} />
+                    }} />
 
 
                 </Box>
@@ -307,7 +307,7 @@ const Form: React.FC<FormProps> = ({ setExcuses, mockExcuse }) => {
             </Card >
             <Box >
                 {loading ? (
-                    <CircularProgress sx={{ display: 'flex', textAlign: "center", margin: "0 auto", width: "95vw", marginTop: "2vh"}} />
+                    <CircularProgress sx={{ display: 'flex', textAlign: "center", margin: "0 auto", width: "95vw", marginTop: "2vh" }} />
                 ) : (null)}
             </Box>
         </>

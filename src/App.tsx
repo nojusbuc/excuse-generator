@@ -3,7 +3,6 @@ import './App.css';
 import Navbar from './components/navbar/Navbar';
 import Form from './components/form/Form';
 import Excuses from './components/excuses/Excuses';
-import { createdMockExcuse } from './mock_data/appendedExcuse';
 
 
 
@@ -19,20 +18,11 @@ const App = () => {
     localStorage.setItem('excuses', JSON.stringify(excuses));
   }, [excuses]);
 
-
-  const updatedMockExcuse = {
-    ...createdMockExcuse,
-    id: Date.now().toString() + Math.floor(Math.random() * 1000000).toString(),
-  }
-
-  
-
-
   return (
     <div className="App">
       <Navbar />
 
-      <Form setExcuses={setExcuses} mockExcuse={updatedMockExcuse} />
+      <Form setExcuses={setExcuses} />
       <Excuses excuses={excuses} setExcuses={setExcuses} />
     </div>
   );

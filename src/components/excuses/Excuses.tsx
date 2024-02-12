@@ -11,12 +11,12 @@ const Excuses: React.FC<ExcusesProps> = ({ excuses, setExcuses }) => {
     const deleteExcuse = (id: string) => {
         setExcuses(excuses.filter((excuse) => excuse.id !== id));
     };
-    const reversedExcuses = [...excuses].reverse();
+
     return (
         <div>
-            {reversedExcuses.map((excuse) => (
+            {excuses.map((excuse) => (
                 <ExcuseCard
-                    key={Math.floor(Math.random() * 1000000)}
+                    key={crypto.randomUUID()}
                     title={excuse.title}
                     dateCreated={excuse.dateCreated}
                     content={excuse.content}

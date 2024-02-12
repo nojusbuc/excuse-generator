@@ -6,6 +6,7 @@ interface CopyToClipboardButtonProps {
 }
 
 const CopyToClipboardButton: React.FC<CopyToClipboardButtonProps> = ({ text }) => {
+
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [severity, setSeverity] = useState<'success' | 'error'>('success');
@@ -34,7 +35,6 @@ const CopyToClipboardButton: React.FC<CopyToClipboardButtonProps> = ({ text }) =
         }
         setSnackbarOpen(false);
     };
-
 
     return (
         <>
