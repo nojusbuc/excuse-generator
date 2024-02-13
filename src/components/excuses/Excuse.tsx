@@ -21,7 +21,7 @@ const ExcuseCard: React.FC<ExcuseCardProps> = ({ title, dateCreated, content, de
             minWidth: 275,
             margin: "0 auto",
             width: "80vw",
-            marginTop: "5vh",
+            marginTop: "2vh",
         }}>
             <CardContent sx={{
                 display: "flex",
