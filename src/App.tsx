@@ -14,13 +14,18 @@ const App = () => {
   });
   const [excusesPerPage, setExcusesPerPage] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const pages = Math.ceil(excuses.length / excusesPerPage);
+  const actualExcusesPerPage = excusesPerPage === 0 ? excuses.length : excusesPerPage;
+  const pages = Math.ceil(excuses.length / actualExcusesPerPage);
   const excusesPerPageOptions = [1, 2, 5, 0];
 
   useEffect(() => {
     localStorage.setItem('excuses', JSON.stringify(excuses));
+    setCurrentPage(1);
   }, [excuses]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [excusesPerPage])
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
@@ -31,9 +36,9 @@ const App = () => {
       <Navbar />
 
       <Form setExcuses={setExcuses} />
-      <ExcuseCountSelect excusesPerPage={excusesPerPage} setExcusesPerPage={setExcusesPerPage} excusesPerPageOptions={excusesPerPageOptions} totalExcuses={excuses.length} />
-      <Excuses excuses={excuses} setExcuses={setExcuses} excusesPerPage={excusesPerPage} currentPage={currentPage} />
-      <Pagination count={pages} shape="rounded" color="primary" onChange={(handlePageChange)} sx={{
+      <ExcuseCountSelect excusesPerPage={excusesPerPage} setExcusesPerPage={setExcusesPerPage} excusesPerPageOptions={excusesPerPageOptions} totalExcuses={excuses.length} currentPage={currentPage} />
+      <Excuses excuses={excuses} setExcuses={setExcuses} excusesPerPage={actualExcusesPerPage} currentPage={currentPage} />
+      <Pagination count={pages} page={currentPage} shape="rounded" color="primary" onChange={(handlePageChange)} sx={{
         display: "flex",
         justifyContent: "center",
         margin: "3vh 0 2vh 0",
