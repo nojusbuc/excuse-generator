@@ -6,16 +6,45 @@ import Typography from '@mui/material/Typography';
 import CopyToClipboardButton from '../buttons/CopyToClipboardBtn';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Grid from '@mui/material/Grid';
-import React from 'react';
+import React, { useState } from 'react';
+import { TextField } from "@mui/material"
+
 
 interface ExcuseCardProps {
     title: string;
     dateCreated: string;
     content: string;
     deleteExcuse: () => void;
+    setTitle:
+    setContent:
 }
 
-const ExcuseCard: React.FC<ExcuseCardProps> = ({ title, dateCreated, content, deleteExcuse }) => {
+const ExcuseCard: React.FC<ExcuseCardProps> = ({ title, dateCreated, content, deleteExcuse, setTitle, setContent }) => {
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+    const [isEditingContent, setIsEditingContent] = useState(false);
+
+    const [editedTitle, setEditedTitle] = useState(title);
+
+    const handleEditingTitle = () => {
+        setIsEditingTitle(true);
+    }
+    // const handleEditingTitle = () => {
+    //     setIsEditing(true);
+    // }
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedTitle(e.target.value);
+    }
+
+    // const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setEditedContent(e.target.value);
+    // }
+
+    const handleBlurTitle = () => {
+        setIsEditingTitle(false);
+        setTitle(editedTitle);
+    }
+
     return (
         <Card sx={{
             minWidth: 275,
@@ -30,10 +59,17 @@ const ExcuseCard: React.FC<ExcuseCardProps> = ({ title, dateCreated, content, de
             }}>
 
                 <Box sx={{ display: 'flex', borderBottom: "1px solid black", alignItems: "baseline" }}>
+                    {
+                        isEditingTitle ?
+                            <TextField sx={{ fontSize: 18, p: "0" }} onBlur={handleBlurTitle} autoFocus
+                                variant="standard" defaultValue={title} onChange={handleTitleChange}>
+                                {title}
+                            </TextField> :
+                            <Typography sx={{ fontSize: 18, p: "0" }} color="text.secondary" onDoubleClick={handleEditingTitle} >
+                                {title}
+                            </Typography>
+                    }
 
-                    <Typography sx={{ fontSize: 18, p: "0" }} color="text.secondary" >
-                        {title}
-                    </Typography>
 
                     <Grid item xs={8} sx={{ marginRight: 0, marginLeft: "auto" }}>
                         <Button sx={{ color: "red", margin: 0 }} onClick={deleteExcuse}>
